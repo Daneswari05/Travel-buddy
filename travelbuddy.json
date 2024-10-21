@@ -1,0 +1,25 @@
+{
+    "TravelBuddyApp": {
+        "features": {
+            "userRegistrationAndLogin": "Allows users to create an account to access and manage their trips.",
+            "creatingATrip": "Users can create trips by providing details like destination and dates, becoming the trip organizer.",
+            "invitingFriends": "Organizers can invite others via email to join the trip.",
+            "tripDashboard": "Central hub for trip details, itinerary, expenses, and chat.",
+            "managingTheItinerary": "Collaborative itinerary planning, allowing members to add activities and vote on options.",
+            "expenseTracking": "Tracks and summarizes trip-related expenses for all members.",
+            "realTimeChat": "Facilitates communication among trip members.",
+            "documentSharing": "Allows uploading and sharing of important trip documents.",
+            "notifications": "Keeps users informed about updates and changes.",
+            "tripCompletion": "Marks the trip as finished and saves all details for future reference."
+        },
+        "futureDevelopment": {
+            "userProfilesAndSocialIntegration": "Implement user profiles and social media integration for sharing experiences.",
+            "smartItinerarySuggestions": "Use machine learning for personalized itinerary recommendations.",
+            "integrationWithTravelAPIs": "Provide real-time travel information through external APIs.",
+            "collaborativeTripPlanning": "Enhance collaboration with real-time updates and voting on activities.",
+            "expensesSplittingAndPaymentIntegration": "Enable cost splitting and integrate with payment gateways.",
+            "integrationWithBookingPlatforms": "Allow direct booking of travel services within the app.",
+            "offlineModeAndMapIntegration": "Develop offline access to trip details and integrate with maps for navigation."
+        }
+    }
+}
