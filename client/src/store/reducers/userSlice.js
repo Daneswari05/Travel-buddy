@@ -20,9 +20,13 @@ const userSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    logoutUser: (state) => {
+      state.user = null;
+      localStorage.removeItem("user");
+    },
   },
 });
 
-export const { setUser, setLoading, setError } = userSlice.actions;
+export const { setUser, setLoading, setError, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

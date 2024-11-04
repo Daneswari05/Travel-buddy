@@ -12,6 +12,7 @@ import {
   Profile,
   TripDetails,
   UpdateTrip,
+  Trips,
 } from "./pages";
 
 import { Navigation, Footer } from "./components";
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/trips/:id" element={<TripDetails />} />
             <Route path="/trips/:id/edit" element={<UpdateTrip />} />
+            <Route path="/trips" element={<Trips />} />
           </>
         )}
         <Route path="/create-trip" element={<Login />} />

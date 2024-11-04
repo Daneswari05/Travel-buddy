@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -6,7 +6,10 @@ import { Card } from "../components";
 
 import { getUserTrips } from "../services/tripApi";
 
+import { logoutUser } from "../store/reducers/userSlice";
+
 const Profile = () => {
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
   const { user } = userData;
 
@@ -24,6 +27,11 @@ const Profile = () => {
   };
   const handleEdit = () => {
     console.log("Edit Profile");
+  };
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    window.location.href = "/";
+    console.log("Logout");
   };
 
   useEffect(() => {
@@ -72,8 +80,23 @@ const Profile = () => {
           <h1>{user.name}</h1>
           <p>New Delhi, India</p>
           <p>UI/Visual Design, Product Design, Research</p>
-          <div className="row">
-            <button onClick={handleEdit}>Edit Profile</button>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "1rem",
+            }}
+          >
+            <button
+              onClick={handleLogout}
+              style={{
+                backgroundColor: "red",
+                color: "white",
+              }}
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -99,9 +122,7 @@ const Profile = () => {
               Your Trips
             </button>
           </div>
-
           <div>
-            {/* Search bar */}
             <input
               type="text"
               placeholder="Search"
@@ -116,7 +137,6 @@ const Profile = () => {
             width: "100%",
           }}
         >
-          {/* Render content based on active tab */}
           {activeTab === "trips" && (
             <div
               key={filteredTrips.length}
@@ -127,47 +147,40 @@ const Profile = () => {
                 gridGap: "2rem",
               }}
             >
-              {/* Render filtered trips */}
-              {
-                // If loading, show loading message
-                isLoading ? (
-                  <p
-                    className="row"
-                    style={{
-                      width: "100%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginTop: "2rem",
-                    }}
-                  >
-                    Loading trips...
-                  </p>
-                ) : // If no trips, show no trips message
-                filteredTrips.length === 0 ? (
-                  <div
-                    className="inner-container"
-                    style={{
-                      width: "100%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginTop: "2rem",
-                    }}
-                  >
-                    <h2>No Trips Found</h2>
-                    <Link to="/create-trips" className="button">
-                      Create a Trip
-                    </Link>
-                  </div>
-                ) : (
-                  // Else, render trips
-
-                  filteredTrips.map((trip) => (
-                    <Link key={trip.id} to={`/trips/${trip._id}`}>
-                      <Card trip={trip} />
-                    </Link>
-                  ))
-                )
-              }
+              {isLoading ? (
+                <p
+                  className="row"
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "2rem",
+                  }}
+                >
+                  Loading trips...
+                </p>
+              ) : filteredTrips.length === 0 ? (
+                <div
+                  className="inner-container"
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <h2>No Trips Found</h2>
+                  <Link to="/create-trip" className="button">
+                    Create a Trip
+                  </Link>
+                </div>
+              ) : (
+                filteredTrips.map((trip) => (
+                  <Link key={trip.id} to={`/trips/${trip._id}`}>
+                    <Card trip={trip} />
+                  </Link>
+                ))
+              )}
             </div>
           )}
         </div>
