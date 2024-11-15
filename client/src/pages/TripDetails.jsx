@@ -23,35 +23,7 @@ const TripDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [touristPlaces, setTouristPlaces] = useState([]);
-  const [hotels, setHotels] = useState([
-    {
-      hotel_name: "Hotel 1",
-      address: "Address 1",
-      review_score: 4.5,
-      min_total_price: 100,
-      max_photo_url: "https://via.placeholder.com/150",
-      urL: "https://www.google.com",
-      zip: "123456",
-    },
-    {
-      hotel_name: "Hotel 2",
-      address: "Address 2",
-      review_score: 4.0,
-      min_total_price: 200,
-      max_photo_url: "https://via.placeholder.com/150",
-      urL: "https://www.google.com",
-      zip: "123456",
-    },
-    {
-      hotel_name: "Hotel 3",
-      address: "Address 3",
-      review_score: 3.5,
-      min_total_price: 300,
-      max_photo_url: "https://via.placeholder.com/150",
-      urL: "https://www.google.com",
-      zip: "123456",
-    },
-  ]);
+  const [hotels, setHotels] = useState([]);
 
   const { user } = useSelector((state) => state.user);
   const { id } = useParams();
@@ -63,7 +35,6 @@ const TripDetails = () => {
     } else {
     }
   };
-
   const handleDelete = () => {
     if (trip?.createdBy === user?._id) {
       deleteTrip(id)
@@ -85,23 +56,31 @@ const TripDetails = () => {
         const trip = await getTripById(id);
         setTrip(trip);
 
-        const [fetchedImages, fetchedTouristPlaces, placeProperty] =
-          await Promise.all([
-            fetchImages(trip.destination),
-            fetchTouristPlaces(trip.destination),
-            fetchPlaceLocation(trip.destination),
-          ]);
+        const images = await fetchImages(trip.destination);
+        const touristPlaces = await fetchTouristPlaces(trip.destination);
+        if (touristPlaces?.length > 0) {
+          // convert date into yyyy-mm-dd format
+          const checkin_date = new Date(trip.startDate)
+            .toISOString()
+            .split("T")[0];
+          const checkout_date = new Date(trip.endDate)
+            .toISOString()
+            .split("T")[0];
 
-        setImages(fetchedImages);
-        setTouristPlaces(fetchedTouristPlaces);
-
-        if (placeProperty && placeProperty.lat && placeProperty.lon) {
-          const fetchedHotels = await fetchHotels(
-            placeProperty.lat,
-            placeProperty.lon
-          );
+          const fetchedHotels = await fetchHotels({
+            lat: touristPlaces[1]?.latitude,
+            lon: touristPlaces[1]?.longitude,
+            // format date in yyyy-mm-dd without timezone
+            checkin_date: checkin_date,
+            checkout_date: checkout_date,
+            room_size:
+              // convert to string
+              trip?.roomSize?.toString() ?? "1",
+          });
           setHotels(fetchedHotels);
         }
+        setImages(images);
+        setTouristPlaces(touristPlaces);
       } catch (error) {
         console.error("Error fetching trip details:", error);
       } finally {
@@ -111,19 +90,41 @@ const TripDetails = () => {
 
     fetchTripDetails();
   }, [id]);
+  useEffect(() => {
+    // bring to top
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div>
       {isLoading ? (
         <div className="container">Loading...</div>
       ) : (
-        <div className="row" style={{ justifyContent: "space-between" }}>
-          {/* Left part */}
+        <div
+          className="row"
+          style={{
+            // display grid of 2 col 1 row
+            display: "grid",
+            gridTemplateColumns: "3fr 1fr",
+            gap: "2rem",
+            width: "100%",
+            height: "100%",
+          }}
+        >
           <div
             className="inner-container"
-            style={{ padding: "2rem", gap: "2rem", minWidth: "60%" }}
+            style={{
+              padding: "2rem",
+              gap: "2rem",
+              minWidth: "60%",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+            }}
           >
-            {/* Heading */}
             <div className="row" style={{ width: "100%" }}>
               <div
                 className="inner-container"
@@ -134,12 +135,22 @@ const TripDetails = () => {
               </div>
               <div className="row">
                 <button onClick={handleEdit}>Edit</button>
-                <button onClick={handleDelete}>Delete</button>
                 <InviteFriend />
+                <button
+                  onClick={handleDelete}
+                  style={{
+                    backgroundColor: "red",
+                    color: "white",
+                    border: "none",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.5rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             </div>
-
-            {/* Event details */}
             <div
               className="inner-container"
               style={{ alignItems: "flex-start", width: "100%" }}
@@ -155,12 +166,25 @@ const TripDetails = () => {
                   }}
                 >
                   {[
-                    { label: "Start Date", value: trip?.startDate },
-                    { label: "End Date", value: trip?.endDate },
+                    {
+                      label: "Start Date",
+                      value: trip?.startDate
+                        ? // format to readabke date
+                          new Date(trip?.startDate).toDateString()
+                        : "",
+                    },
+                    {
+                      label: "End Date",
+                      value:
+                        // format to readabke date
+                        trip?.endDate
+                          ? new Date(trip?.endDate).toDateString()
+                          : "",
+                    },
                     { label: "Created By", value: trip?.createdBy },
                     {
                       label: "Invited friends",
-                      value: "No of friends invited",
+                      value: trip?.invitations?.join(", "),
                     },
                     { label: "Total days", value: `${trip?.totalDays} Days` },
                     { label: "Cost for each", value: trip?.cost },
@@ -174,6 +198,7 @@ const TripDetails = () => {
                         alignItems: "flex-start",
                         padding: "1rem",
                         borderRadius: "0.5rem",
+                        width: "100%",
                       }}
                       key={label}
                     >
@@ -184,8 +209,6 @@ const TripDetails = () => {
                 </div>
               </div>
             </div>
-
-            {/* Tourist Places */}
             <div
               className="inner-container"
               style={{ alignItems: "flex-start", width: "100%" }}
@@ -211,8 +234,6 @@ const TripDetails = () => {
                 ))}
               </div>
             </div>
-
-            {/* Image Gallery */}
             <div
               className="inner-container"
               style={{ alignItems: "flex-start", width: "100%" }}
@@ -221,8 +242,6 @@ const TripDetails = () => {
               {images?.length > 0 && <ImageCarousel images={images} />}
             </div>
           </div>
-
-          {/* Right part */}
           <div
             style={{
               display: "flex",
@@ -230,6 +249,8 @@ const TripDetails = () => {
               gap: "2rem",
               padding: "2rem",
               borderLeft: "1px solid #64ccc5",
+              height: "100%",
+              alignItems: "center",
             }}
           >
             <div
@@ -253,7 +274,7 @@ const TripDetails = () => {
                 className="inner-container"
                 style={{ alignItems: "flex-start", gap: "1rem" }}
               >
-                <h1>Hotels Nearby</h1>
+                <h1>Hotels Nearby for trip</h1>
                 {hotels?.slice(0, 4).map((hotel) => (
                   <HotelCard
                     key={hotel?.hotel_name}
@@ -262,7 +283,7 @@ const TripDetails = () => {
                     reviewScore={hotel?.review_score}
                     price={hotel?.min_total_price}
                     imageURL={hotel?.max_photo_url}
-                    websiteURL={hotel?.urL}
+                    websiteURL={hotel?.url}
                     zip={hotel?.zip}
                   />
                 ))}

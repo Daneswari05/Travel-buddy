@@ -12,7 +12,7 @@ const TouristLocationCard = ({
       style={{
         display: "flex",
         flexDirection: "column",
-        maxWidth: "250px",
+        minWidth: "250px",
         padding: "10px",
         borderRadius: "8px",
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",

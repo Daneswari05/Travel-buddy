@@ -62,13 +62,13 @@ const Profile = () => {
     >
       <div className="row" style={{ gap: "2rem" }}>
         <img
-          src="https://source.unsplash.com/random/800x600?people-profilepicture"
+          src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
           alt="profile pic"
           style={{
-            width: "180px",
-            height: "180px",
+            width: "150px",
+            height: "150px",
             borderRadius: "50%",
-            objectFit: "cover",
+            objectFit: "fill",
           }}
         />
         <div
@@ -78,8 +78,8 @@ const Profile = () => {
           }}
         >
           <h1>{user.name}</h1>
-          <p>New Delhi, India</p>
-          <p>UI/Visual Design, Product Design, Research</p>
+          <p>{user.email}</p>
+          <p>{`Total ${trips.length} trips created`}</p>
           <div
             style={{
               display: "flex",

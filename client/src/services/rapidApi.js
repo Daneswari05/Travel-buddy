@@ -72,24 +72,30 @@ export const fetchPlaceLocation = async (location) => {
   }
 };
 
-export const fetchHotels = async (lat, lon) => {
+export const fetchHotels = async ({
+  lat,
+  lon,
+  checkin_date,
+  checkout_date,
+  room_size,
+}) => {
   const options = {
     method: "GET",
     url: "https://booking-com.p.rapidapi.com/v1/hotels/search-by-coordinates",
     params: {
-      units: "imperial",
-      room_number: "1",
-      longitude: lon,
-      latitude: lat,
-      filter_by_currency: "AED",
-      order_by: "popularity",
+      adults_number: room_size ?? "1",
+      checkin_date: checkin_date,
+      children_number: "1",
       locale: "en-gb",
-      checkout_date: "2023-09-28",
-      adults_number: "2",
-      checkin_date: "2023-09-27",
+      room_number: room_size ?? "1",
+      units: "metric",
+      filter_by_currency: "USD",
+      longitude: lon,
       children_ages: "5,0",
+      checkout_date: checkout_date,
+      latitude: lat,
+      order_by: "popularity",
       include_adjacency: "true",
-      children_number: "2",
       page_number: "0",
       categories_filter_ids: "class::2,class::4,free_cancellation::1",
     },

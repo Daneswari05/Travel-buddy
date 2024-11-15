@@ -36,35 +36,25 @@ const TripForm = () => {
     updatedEmails[index] = value;
     setInvitationEmails(updatedEmails);
   };
-
   const handleAddMore = () => {
     setInvitationEmails([...invitationEmails, ""]);
   };
-
   const handleRemoveEmail = (index) => {
     const updatedEmails = invitationEmails.filter((_, i) => i !== index);
     setInvitationEmails(updatedEmails);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsLoading(true);
 
-    // Update trip data with invitation emails
     const updatedTripData = {
       ...tripData,
       invitations: invitationEmails.filter((email) => email.trim() !== ""),
     };
 
-    // Send trip data to the server
     await createTrip(updatedTripData);
-
     setIsLoading(false);
-
-    navigate("/");
-
-    // Clear form fields after submitting
+    navigate("/profile");
     setTripData({
       destination: "",
       startDate: "",
@@ -75,11 +65,8 @@ const TripForm = () => {
       createdBy: user._id,
       invitations: [],
     });
-
-    setInvitationEmails([""]);
+    setInvitationEmails([]);
   };
-
-  console.log("TripForm.jsx: tripData", tripData);
 
   return (
     <form
@@ -112,6 +99,13 @@ const TripForm = () => {
             required
           />
         </div>
+      </div>
+      <div
+        className="row"
+        style={{
+          width: "100%",
+        }}
+      >
         <div
           className="inner-container"
           style={{
@@ -129,8 +123,25 @@ const TripForm = () => {
             required
           />
         </div>
+        <div
+          className="inner-container"
+          style={{
+            alignItems: "flex-start",
+            width: "100%",
+          }}
+        >
+          <label htmlFor="cost">Estimated cost per person:</label>
+          <input
+            id="cost"
+            name="cost"
+            type="number"
+            value={tripData.cost}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter in dollar currency..."
+          />
+        </div>
       </div>
-
       <div
         className="row"
         style={{
@@ -172,26 +183,6 @@ const TripForm = () => {
           />
         </div>
       </div>
-
-      <div
-        className="inner-container"
-        style={{
-          alignItems: "flex-start",
-          width: "100%",
-        }}
-      >
-        <label htmlFor="cost">Estimated cost per person:</label>
-        <input
-          id="cost"
-          name="cost"
-          type="number" // Added 'type' attribute to ensure the input accepts numbers
-          value={tripData.cost}
-          onChange={handleInputChange}
-          required
-          placeholder="Enter in dollar currency..."
-        />
-      </div>
-
       <div
         className="inner-container"
         style={{
@@ -208,7 +199,6 @@ const TripForm = () => {
           required
         />
       </div>
-
       <div
         className="inner-container"
         style={{
@@ -268,7 +258,6 @@ const TripForm = () => {
           Add more emails...
         </p>
       </div>
-
       <button type="submit" disabled={isLoading}>
         {isLoading ? "Creating..." : "Create Trip"}
       </button>

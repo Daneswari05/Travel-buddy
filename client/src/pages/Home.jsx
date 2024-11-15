@@ -13,7 +13,6 @@ const Home = () => {
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
-
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
@@ -29,18 +28,13 @@ const Home = () => {
 
   return (
     <div className="container">
-      {/* Header */}
       <Header username={user ? user.name : ""} />
-
-      {/* Trip cards */}
       <div
         style={{
           width: "100%",
           minHeight: "100vh",
           backgroundColor: "#dafffb",
-
           padding: "5rem 2rem",
-
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
@@ -94,8 +88,6 @@ const Home = () => {
           })}
         </div>
       </div>
-
-      {/* Why choose us */}
       <div
         className="row"
         style={{

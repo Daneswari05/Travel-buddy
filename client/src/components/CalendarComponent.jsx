@@ -22,7 +22,11 @@ const CalendarComponent = ({ startDate, endDate }) => {
 
   return (
     <div>
-      <Calendar value={startDate || endDate} onChange={handleDateChange} />
+      <Calendar
+        calendarType="US"
+        onChange={handleDateChange}
+        value={startDate ? new Date(startDate) : new Date()}
+      />
     </div>
   );
 };

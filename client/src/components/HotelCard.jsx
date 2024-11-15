@@ -62,7 +62,18 @@ const HotelCard = ({
           <span style={{ fontSize: "14px", marginRight: "5px" }}>Price:</span>
           <span style={{ fontSize: "14px", fontWeight: "bold" }}>{price}</span>
         </div>
-        <a href={websiteURL} target="_blank" rel="noopener noreferrer">
+        <a
+          href={websiteURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            fontSize: "14px",
+            color: "#64ccc5",
+            textDecoration: "none",
+            marginTop: "10px",
+            cursor: "pointer",
+          }}
+        >
           Visit Website
         </a>
       </div>

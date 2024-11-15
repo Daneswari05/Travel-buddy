@@ -35,7 +35,7 @@ const ImageCarousel = ({ images }) => {
         alt={currentImage.alt_description}
         style={{
           width: "100%",
-          height: "20rem",
+          height: "80vh",
           objectFit: "cover",
           borderRadius: "0.5rem",
         }}
@@ -44,7 +44,6 @@ const ImageCarousel = ({ images }) => {
         className="row"
         style={{
           width: "100%",
-          gap: "15rem",
         }}
       >
         <button
