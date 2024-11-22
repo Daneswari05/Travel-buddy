@@ -30,7 +30,7 @@ export const travelData = async (location) => {
   }
 };
 
-export const fetchTouristPlaces = async (location) => {
+export const fetchTouristPlaces = async (location, limit) => {
   const options = {
     method: "GET",
     url: "https://booking-com.p.rapidapi.com/v1/hotels/locations",
@@ -110,5 +110,32 @@ export const fetchHotels = async ({
     return response.data.result;
   } catch (error) {
     console.error("Error fetching hotels:", error);
+  }
+};
+
+export const fetchTouristPlacesByLocation = async () => {
+  const options = {
+    method: "GET",
+    url: "https://opentripmap-places-v1.p.rapidapi.com/%7Blang%7D/places/autosuggest",
+    params: {
+      kinds: "foods",
+      name: "don",
+      format: "json",
+      limit: "10",
+      lon: "-70.65",
+      radius: "5000",
+      lat: "-33.437",
+    },
+    headers: {
+      "X-RapidAPI-Key": rapidApiKey,
+      "X-RapidAPI-Host": "opentripmap-places-v1.p.rapidapi.com",
+    },
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching tourist places by location:", error);
   }
 };
