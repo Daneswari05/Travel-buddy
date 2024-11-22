@@ -32,6 +32,17 @@ const LOCATIONS = [
   "Austin",
   "Jacksonville",
   "Fort Worth",
+  "Columbus",
+  "San Francisco",
+  "Charlotte",
+  "Indianapolis",
+  "Seattle",
+  "Denver",
+  "Washington",
+  "Boston",
+  "El Paso",
+  "Detroit",
+  "Nashville",
 ];
 
 const Explore = () => {
